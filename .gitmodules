@@ -1,3 +1,7 @@
 [submodule "lib/ExtendedIO"]
 	path = lib/ExtendedIO
 	url = https://github.com/ArchLeaders/ExtendedIO
+[submodule "lib/pybind11"]
+	path = pymsbt3/src/include/pybind11
+	url = ../../pybind/pybind11
+	branch = stable

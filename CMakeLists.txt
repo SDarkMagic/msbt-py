@@ -50,6 +50,7 @@ if(BUILD_TESTING)
 endif()
 
 add_subdirectory(msbt_to_yaml)
+add_subdirectory(pymsbt3)
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
