@@ -9,17 +9,13 @@
 
 namespace py = pybind11;
 namespace tags = oepd::msbt::tags;
-constexpr auto byref = py::return_value_policy::reference_internal;
-
-oepd::msbt::MSBT FromBinary(std::vector<u8> data){
-    return oepd::msbt::FromBinary(data);
-}
+constexpr auto byref = py::return_value_policy::reference;
 
 PYBIND11_MODULE(pymsbt3, m){
     m.doc() = "Python wrapper for the msbt EPD library.";
 
-    m.def("FromBinary", &FromBinary, py::arg("data"), "Load an MSBT from raw binary data");
-    m.def("FromText", &oepd::msbt::FromText, py::arg("text"), "Load an MBST from text data");
+    m.def("FromBinary", &oepd::msbt::FromBinary, py::arg("data"), py::call_guard<py::gil_scoped_release>());
+    m.def("FromText", &oepd::msbt::FromText, py::arg("text"), py::call_guard<py::gil_scoped_release>());
 
     py::class_<oepd::msbt::MSBT>(m, "MSBT")
     .def_readonly("label_section", &oepd::msbt::MSBT::m_label_section, byref)
