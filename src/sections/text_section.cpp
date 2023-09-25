@@ -1,4 +1,3 @@
-#include <codecvt>
 #include <locale>
 #include <string>
 
@@ -8,7 +7,13 @@
 
 namespace oepd::msbt {
 
-static std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>, wchar_t> converter;
+struct codecvt : std::codecvt<wchar_t, char, std::mbstate_t>
+{
+    ~codecvt()
+    { }
+};
+
+static std::wstring_convert<codecvt> converter;
 
 TextSection::TextEntryValue::TextEntryValue(tags::Tag* tag) {
   m_tag = tag;
@@ -118,9 +123,9 @@ void TextSection::Write(exio::BinaryWriter& writer) {
   std::vector<u32> offsets;
 
   writer.Seek(writer.Tell() + m_text_entries.size() * 4);
-  for (const auto entry : m_text_entries) {
+  for (const auto &entry : m_text_entries) {
     offsets.push_back(writer.Tell() - block_offset);
-    for (const auto value : entry.m_values) {
+    for (const auto &value : entry.m_values) {
       if (value.m_tag) {
         writer.Write<u16>(0x0E);
         value.m_tag->ToBinary(writer);
